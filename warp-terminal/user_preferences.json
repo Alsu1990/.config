@@ -1,0 +1,18 @@
+{
+  "prefs": {
+    "ExperimentId": "1db0d2e0-492e-480d-aee9-ee84486d837a",
+    "Theme": "\"CyberWave\"",
+    "TelemetryEnabled": "true",
+    "AIAssistantRequestLimitInfo": "{\"limit\":100,\"num_requests_used_since_refresh\":0,\"next_refresh_time\":\"2024-11-21T19:00:42.778025Z\",\"is_unlimited\":false}",
+    "HasAutoOpenedWelcomeFolder": "true",
+    "CrashReportingEnabled": "true",
+    "SavedPrompt": "\"Default\"",
+    "HonorPS1": "false",
+    "SameLinePromptBlockState": "\"DoNotShow\"",
+    "ReceivedReferralTheme": "\"Inactive\"",
+    "AgentModeOnboardingBlockShown": "true",
+    "FontSize": "17.0",
+    "WelcomeTipsFeaturesUsed": "[{\"Hint\":\"CreateBlock\"}]",
+    "Shortcuts": "true"
+  }
+}
