@@ -21,7 +21,6 @@ local svlangserver_opts = {
 
 local M = {
 
-    -- [S]Verilog ---------------------------------------------------------------------------------
     -- highlight
     {
         "nvim-treesitter/nvim-treesitter",
@@ -29,6 +28,7 @@ local M = {
             vim.list_extend(opts.ensure_installed, {
                 "verilog",
                 "tcl",
+                "make",
             })
         end,
     },
