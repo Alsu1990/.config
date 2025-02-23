@@ -36,8 +36,8 @@ local M = {
                             includeIndexing = {
                                 "*.{v,vh,sv,svh}",
                                 "**/*.{v,vh,sv,svh}",
-                                "/tools/Xilinx/Vivado/2023.2/data/verilog/src/unimacro/*.{v,vh,sv,svh}",
-                                "/tools/Xilinx/Vivado/2023.2/data/verilog/src/unisims/*.{v,vh,sv,svh}",
+                                -- "/tools/Xilinx/Vivado/2023.2/data/verilog/src/unimacro/*.{v,vh,sv,svh}",
+                                -- "/tools/Xilinx/Vivado/2023.2/data/verilog/src/unisims/*.{v,vh,sv,svh}",
                             },
                             linter = "verilator",
                             launchConfiguration = "verilator --sv --Wall --lint-only",
