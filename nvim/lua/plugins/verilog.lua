@@ -9,17 +9,16 @@ local lsp_servers = {
         settings = {
             systemverilog = {
                 includeIndexing = {
-                    "*.{v,vh,sv,svh}",
-                    "**/*.{v,vh,sv,svh}",
-                    -- "{design,emu,fpga,rtl}/**/*.{v,vh,sv,svh}",
+                    -- "*.{v,vh,sv,svh}",
+                    -- "**/*.{v,vh,sv,svh}",
+                    "{design,emu,fpga,rtl}/**/*.{v,vh,sv,svh}",
                     -- "{grid,pcie,nic,common,shared_ip}/{design,rtl}/**/*.{v,vh,sv,svh}",
                     -- "/tools/Xilinx/Vivado/2023.2/data/verilog/src/unimacro/*.{v,vh,sv,svh}",
                     -- "/tools/Xilinx/Vivado/2023.2/data/verilog/src/unisims/*.{v,vh,sv,svh}",
                 },
                 excludeIndexing = {
                     -- ".*",
-                    "{target,verif,sim,build}/**",
-                    "*hard_ip*/",
+                    "{target,verif,sim,build,hard_ip}/",
                 },
                 linter = "verilator",
                 launchConfiguration = "verilator --sv --Wall --lint-only",

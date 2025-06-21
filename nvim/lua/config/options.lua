@@ -9,7 +9,6 @@ vim.o.softtabstop = 4
 
 -- use system clipboard
 vim.opt.clipboard = "unnamedplus"
-vim.opt.wrap = true
 
 vim.g.autoformat = false
 
@@ -24,6 +23,9 @@ vim.filetype.add({
         sdc = "tcl",
         idc = "tcl",
         utf = "tcl",
+        auto = "verilog",
+        vstub = "verilog",
+        v = "verilog",
         vh = "verilog",
         svh = "verilog",
     },
