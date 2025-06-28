@@ -16,7 +16,7 @@ local M = {
         "williamboman/mason.nvim",
         opts = function(_, opts)
             vim.list_extend(opts.ensure_installed, {
-                "svlangserver",
+                "verible",
             })
         end,
     },
@@ -24,26 +24,13 @@ local M = {
         "neovim/nvim-lspconfig",
         opts = {
             servers = {
-                svlangserver = {
-                    cmd = { "svlangserver" },
+                verible = {
+                    cmd = { "verible-verilog-ls --indentation_spaces 4" },
                     filetypes = { "verilog", "systemverilog" },
                     root_dir = require("lspconfig").util.root_pattern(
-                        ".svlangserver",
+                        "verible.filelist",
                         ".git"
                     ),
-                    settings = {
-                        systemverilog = {
-                            includeIndexing = {
-                                "*.{v,vh,sv,svh}",
-                                "**/*.{v,vh,sv,svh}",
-                                "/tools/Xilinx/Vivado/2023.2/data/verilog/src/unimacro/*.{v,vh,sv,svh}",
-                                "/tools/Xilinx/Vivado/2023.2/data/verilog/src/unisims/*.{v,vh,sv,svh}",
-                            },
-                            linter = "verilator",
-                            launchConfiguration = "verilator --sv --Wall --lint-only",
-                            formatCommand = "verible-verilog-format --indentation_spaces 4",
-                        },
-                    },
                 },
             },
         },
