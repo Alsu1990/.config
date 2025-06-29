@@ -1,43 +1,7 @@
-local lsp_servers = {
-    svlangserver = {
-        cmd = { "svlangserver" },
-        filetypes = { "verilog", "systemverilog" },
-        root_dir = require("lspconfig").util.root_pattern(
-            ".svlangserver",
-            ".git"
-        ),
-        settings = {
-            systemverilog = {
-                includeIndexing = {
-                    -- "*.{v,vh,sv,svh}",
-                    -- "**/*.{v,vh,sv,svh}",
-                    "{design,emu,fpga,rtl}/**/*.{v,vh,sv,svh}",
-                    -- "{grid,pcie,nic,common,shared_ip}/{design,rtl}/**/*.{v,vh,sv,svh}",
-                    -- "/tools/Xilinx/Vivado/2023.2/data/verilog/src/unimacro/*.{v,vh,sv,svh}",
-                    -- "/tools/Xilinx/Vivado/2023.2/data/verilog/src/unisims/*.{v,vh,sv,svh}",
-                },
-                excludeIndexing = {
-                    -- ".*",
-                    "{target,verif,sim,build,hard_ip}/",
-                },
-                linter = "verilator",
-                launchConfiguration = "verilator --sv --Wall --lint-only",
-                formatCommand = "verible-verilog-format --indentation_spaces 4",
-            },
-        },
-    },
-    -- verible = {
-    --     cmd = { "verible-verilog-ls", "--file_list_path", ".nvim/verible.filelist" },
-    --     filetypes = { "verilog", "systemverilog" },
-    --     root_dir = function(fname)
-    --         return vim.fs.dirname(
-    --             vim.fs.find(".git", { path = fname, upward = true })[1]
-    --         )
-    --     end,
-    -- },
-}
-local M = {
-    -- highlight
+-- lua/plugins/verilog.lua
+
+return {
+    -- Make sure treesitter parsers are installed
     {
         "nvim-treesitter/nvim-treesitter",
         opts = function(_, opts)
@@ -49,20 +13,42 @@ local M = {
         end,
     },
 
-    -- LSP
+    -- Configure Mason to install verible
     {
         "williamboman/mason.nvim",
         opts = function(_, opts)
-            vim.list_extend(opts.ensure_installed, vim.tbl_keys(lsp_servers))
+            vim.list_extend(opts.ensure_installed, {
+                "verible", -- Ensure verible is installed
+            })
         end,
     },
+
+    -- Configure the LSP server
     {
         "neovim/nvim-lspconfig",
         opts = {
-            servers = lsp_servers,
+            servers = {
+                -- Add the verible configuration
+                verible = {
+                    -- The command to start the language server.
+                    -- We point it to a file list in the project's root directory.
+                    cmd = {
+                        "verible-verilog-ls",
+                        "--lsp_enable_hover",
+                        "--indentation_spaces=4",
+                    },
+                    filetypes = { "verilog", "systemverilog" },
+                    -- This function correctly finds the project root based on the .git folder
+                    root_dir = function(fname)
+                        local git_root =
+                            vim.fs.find(".git", { path = fname, upward = true })
+                        if git_root and #git_root > 0 then
+                            return vim.fs.dirname(git_root[1])
+                        end
+                        return nil
+                    end,
+                },
+            },
         },
-        setup = {},
     },
 }
-
-return M
