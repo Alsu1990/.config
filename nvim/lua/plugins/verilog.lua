@@ -39,14 +39,10 @@ return {
                     },
                     filetypes = { "verilog", "systemverilog" },
                     -- This function correctly finds the project root based on the .git folder
-                    root_dir = function(fname)
-                        local git_root =
-                            vim.fs.find(".git", { path = fname, upward = true })
-                        if git_root and #git_root > 0 then
-                            return vim.fs.dirname(git_root[1])
-                        end
-                        return nil
-                    end,
+                    root_dir = require("lspconfig").util.root_pattern(
+                        "verible.filelist",
+                        ".git"
+                    ),
                 },
             },
         },

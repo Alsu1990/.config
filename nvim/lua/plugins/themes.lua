@@ -1,75 +1,37 @@
 return {
     {
         "catppuccin/nvim",
-        lazy = true,
         name = "catppuccin",
+        priority = 1000,
+        opts = require("config.catppuccin"),
+    },
+    {
+        "folke/tokyonight.nvim",
+        lazy = false,
+        priority = 1000,
         opts = {
-            flavour = "mocha",
-            integrations = {
-                aerial = true,
-                alpha = true,
-                cmp = true,
-                dashboard = true,
-                flash = true,
-                grug_far = true,
-                gitsigns = true,
-                headlines = true,
-                illuminate = true,
-                indent_blankline = { enabled = true },
-                leap = true,
-                lsp_trouble = true,
-                mason = true,
-                markdown = true,
-                mini = true,
-                native_lsp = {
-                    enabled = true,
-                    underlines = {
-                        errors = { "undercurl" },
-                        hints = { "undercurl" },
-                        warnings = { "undercurl" },
-                        information = { "undercurl" },
-                    },
-                },
-                navic = { enabled = true, custom_bg = "lualine" },
-                neotest = true,
-                neotree = true,
-                noice = true,
-                notify = true,
-                semantic_tokens = true,
-                telescope = true,
-                treesitter = true,
-                treesitter_context = true,
-                which_key = true,
-            },
+            style = "night",
         },
-        {
-            "folke/tokyonight.nvim",
-            lazy = false,
-            priority = 1000,
-            opts = {
-                style = "night",
-            },
-        },
-        {
-            "rebelot/kanagawa.nvim",
-            lazy = false,
-            priority = 1000,
-            opts = {
-                compile = true,
-                undercurl = true,
-                transparent = false,
-                commentStyle = { italic = true },
-                keywordsStyle = { italic = true },
-                stringsStyle = { bold = true },
-                dimInactive = false,
-                terminalColors = true,
-                overrides = function(colors)
-                    return {}
-                end,
-                theme = "dragon"
-            },
+    },
+    {
+        "rebelot/kanagawa.nvim",
+        lazy = false,
+        priority = 1000,
+        opts = {
+            compile = true,
+            undercurl = true,
+            transparent = false,
+            commentStyle = { italic = true },
+            keywordsStyle = { italic = true },
+            stringsStyle = { bold = true },
+            dimInactive = false,
+            terminalColors = true,
+            overrides = function(colors)
+                return {}
+            end,
+            theme = "dragon",
         },
     },
 
-    { "LazyVim/LazyVim", opts = { colorscheme = "kanagawa-wave" } },
+    { "LazyVim/LazyVim", opts = { colorscheme = "catppuccin" } },
 }
