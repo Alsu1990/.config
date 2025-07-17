@@ -2,7 +2,7 @@ local M = {
     {
         "neovim/nvim-lspconfig",
         opts = function(_, opts)
-            -- NOTE: change clangd fallback to google
+            -- change clangd fallback to google
             opts.servers.clangd.cmd = {
                 "clangd",
                 "--background-index",

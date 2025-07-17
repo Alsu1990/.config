@@ -4,3 +4,10 @@ dconf
 gtk-2.0
 menus/applications-merged
 pulse
+gh
+goa-1.0
+ibus/bus
+xfce4
+QtProject.conf
+user-dirs.dirs
+user-dirs.locale

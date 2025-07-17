@@ -6,3 +6,10 @@ debug
 foo.*
 *.log
 data
+xfce4
+gh
+goa*
+ibus*
+user-dirs*
+lazy-lock.json
+lazyvim.json
