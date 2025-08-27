@@ -1,4 +1,54 @@
 -- lua/plugins/verilog.lua
+local lsp_opts = {
+    veridian = {
+
+        cmd = { "veridian" },
+        filetypes = { "verilog", "systemverilog" },
+        -- This function correctly finds the project root based on the .git folder
+        root_dir = require("lspconfig").util.root_pattern(
+            "veridian.yml",
+            ".git"
+        ),
+    },
+    verible = {
+        cmd = {
+            "verible-verilog-ls",
+            "--lsp_enable_hover",
+            "--indentation_spaces=4",
+        },
+        filetypes = { "verilog", "systemverilog" },
+        -- This function correctly finds the project root based on the .git folder
+        root_dir = require("lspconfig").util.root_pattern(
+            "verible.filelist",
+            ".git"
+        ),
+    },
+    svlangserver = {
+        cmd = { "svlangserver" },
+        filetypes = { "systemverilog", "verilog" },
+        root_dir = require("lspconfig").util.root_pattern(
+            ".svlangserver",
+            ".git"
+        ),
+        settings = {
+            systemverilog = {
+                includeIndexing = {
+                    "**/{rtl,include}/**/*.{sv,svh,v,vh,veo,vstub}",
+                },
+                excludeIndexing = {
+                    -- "*venv*/**",
+                    -- "{scripts,common,shared_ip,grid,nic,nextcore}/**",
+                    -- "verif/**",
+                    -- "target/**",
+                },
+                defines = {},
+                linter = "verilator",
+                launchConfiguration = "verilator --sv --lint-only --Wall",
+                formatCommand = "verible-verilog-format --indentation_spaces=4",
+            },
+        },
+    },
+}
 
 return {
     -- Make sure treesitter parsers are installed
@@ -19,6 +69,7 @@ return {
         opts = function(_, opts)
             vim.list_extend(opts.ensure_installed, {
                 "verible", -- Ensure verible is installed
+                -- "svlangserver", -- SystemVerilog LSP server
             })
         end,
     },
@@ -29,21 +80,24 @@ return {
         opts = {
             servers = {
                 -- Add the verible configuration
-                verible = {
-                    -- The command to start the language server.
-                    -- We point it to a file list in the project's root directory.
-                    cmd = {
-                        "verible-verilog-ls",
-                        "--lsp_enable_hover",
-                        "--indentation_spaces=4",
-                    },
-                    filetypes = { "verilog", "systemverilog" },
-                    -- This function correctly finds the project root based on the .git folder
-                    root_dir = require("lspconfig").util.root_pattern(
-                        "verible.filelist",
-                        ".git"
-                    ),
-                },
+                verible = lsp_opts.verible,
+                -- svlangserver = lsp_opts.svlangserver,
+                -- veridian = lsp_opts.veridian,
+            },
+        },
+    },
+    {
+        "mfussenegger/nvim-lint",
+        -- opts = function(_, opts)
+        --     vim.list_extend(opts.linters_by_ft, {
+        --         verilog = { "verilator" },
+        --         systemverilog = { "verilator" },
+        --     })
+        -- end,
+        opts = {
+            linters_by_ft = {
+                verilog = { "verilator" },
+                systemverilog = { "verilator" },
             },
         },
     },
