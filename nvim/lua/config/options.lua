@@ -14,20 +14,17 @@ vim.opt.clipboard = "unnamedplus"
 vim.g.autoformat = false
 
 -- file extensions
+local tcl_exts = { "fdc", "idc", "pcf", "sdc", "tss", "utf", "xdc" }
+local verilog_exts = { "auto", "v", "veo", "vh", "vstub", "svh" }
+
+local extension = { core = "yaml" }
+for _, ext in ipairs(tcl_exts) do
+    extension[ext] = "tcl"
+end
+for _, ext in ipairs(verilog_exts) do
+    extension[ext] = "verilog"
+end
+
 vim.filetype.add({
-    extension = {
-        core = "yaml",
-        tss = "tcl",
-        pcf = "tcl",
-        xdc = "tcl",
-        fdc = "tcl",
-        sdc = "tcl",
-        idc = "tcl",
-        utf = "tcl",
-        auto = "verilog",
-        vstub = "verilog",
-        v = "verilog",
-        vh = "verilog",
-        svh = "verilog",
-    },
+    extension = extension,
 })

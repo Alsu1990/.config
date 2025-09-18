@@ -15,6 +15,7 @@ local lsp_opts = {
             "verible-verilog-ls",
             "--lsp_enable_hover",
             "--indentation_spaces=4",
+            "--rules=-explicit-parameter-storage-type=false",
         },
         filetypes = { "verilog", "systemverilog" },
         -- This function correctly finds the project root based on the .git folder
