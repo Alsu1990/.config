@@ -1,14 +1,13 @@
 -- lua/plugins/verilog.lua
 local lsp_opts = {
     veridian = {
-
         cmd = { "veridian" },
         filetypes = { "verilog", "systemverilog" },
         -- This function correctly finds the project root based on the .git folder
-        root_dir = require("lspconfig").util.root_pattern(
+        root_markers = {
             "veridian.yml",
-            ".git"
-        ),
+            ".git",
+        },
     },
     verible = {
         cmd = {
@@ -19,18 +18,18 @@ local lsp_opts = {
         },
         filetypes = { "verilog", "systemverilog" },
         -- This function correctly finds the project root based on the .git folder
-        root_dir = require("lspconfig").util.root_pattern(
+        root_markers = {
             "verible.filelist",
-            ".git"
-        ),
+            ".git",
+        },
     },
     svlangserver = {
         cmd = { "svlangserver" },
         filetypes = { "systemverilog", "verilog" },
-        root_dir = require("lspconfig").util.root_pattern(
+        root_markers = {
             ".svlangserver",
-            ".git"
-        ),
+            ".git",
+        },
         settings = {
             systemverilog = {
                 includeIndexing = {
@@ -66,7 +65,7 @@ return {
 
     -- Configure Mason to install verible
     {
-        "williamboman/mason.nvim",
+        "mason-org/mason.nvim",
         opts = function(_, opts)
             vim.list_extend(opts.ensure_installed, {
                 "verible", -- Ensure verible is installed
