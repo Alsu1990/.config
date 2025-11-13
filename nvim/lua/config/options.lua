@@ -14,10 +14,11 @@ vim.opt.clipboard = "unnamedplus"
 vim.g.autoformat = false
 
 -- file extensions
+local extension = { core = "yaml" }
+
 local tcl_exts = { "fdc", "idc", "pcf", "sdc", "tss", "utf", "xdc" }
 local verilog_exts = { "auto", "v", "veo", "vh", "vstub", "svh" }
 
-local extension = { core = "yaml" }
 for _, ext in ipairs(tcl_exts) do
     extension[ext] = "tcl"
 end
