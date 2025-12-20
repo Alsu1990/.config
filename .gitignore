@@ -11,3 +11,4 @@ xfce4
 QtProject.conf
 user-dirs.dirs
 user-dirs.locale
+configstore/update-notifier-@google
