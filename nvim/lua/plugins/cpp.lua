@@ -10,7 +10,7 @@ local M = {
                 "--header-insertion=iwyu",
                 "--completion-style=detailed",
                 "--function-arg-placeholders",
-                "--fallback-style=webkit",
+                "--fallback-style=Google",
             }
         end,
     },
