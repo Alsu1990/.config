@@ -20,18 +20,27 @@ return {
         opts = {
             compile = true,
             undercurl = true,
-            transparent = false,
             commentStyle = { italic = true },
+            functionStyle = {},
             keywordsStyle = { italic = true },
-            stringsStyle = { bold = true },
-            dimInactive = false,
+            statementStyle = { bold = true },
+            typeStyle = {},
+            transparent = false,
+            -- stringsStyle = { bold = true },
+            dimInactive = true,
             terminalColors = true,
-            overrides = function(colors)
-                return {}
-            end,
-            theme = "dragon",
+            colors = {
+                theme = {
+                    all = {
+                        ui = {
+                            bg_gutter = "none",
+                        },
+                    },
+                },
+            },
+            theme = "wave",
         },
     },
 
-    { "LazyVim/LazyVim", opts = { colorscheme = "catppuccin" } },
+    { "LazyVim/LazyVim", opts = { colorscheme = "kanagawa" } },
 }

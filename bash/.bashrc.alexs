@@ -1,40 +1,41 @@
 #!/usr/bin/env bash
-export SHELL=/bin/bash # make sure the shell is bash
-. "${ENVDIR}"/bashrc.prompt
-set_prompt dark short
+_script_dir=$(dirname $(realpath "${BASH_SOURCE[0]}"))
+export TERM="tmux-256color"
+
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/scripts:$PATH"
 
 # NVM setup for alexs
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
-unset VERILATOR
-export VERILATOR_ROOT="$MY_TOOLS/verilator"
+export MY_TOOLS="/tools"
 
-export PATH="${HOME}/.local/bin:$PATH"
-export PATH="$HOME/bin:$PATH"
-export PATH="$HOME/scripts:$PATH"
-# export PATH="$MY_TOOLS/nvim-linux-x86_64/bin:$PATH" # Nvim 0.11.2
-export PATH="$MY_TOOLS/nvim_0_11_2_old_libc/nvim-linux-x86_64/bin:$PATH" # Nvim 0.11.2 ( to work with older libc on centos 7 / rhel 8)
-export PATH="$MY_TOOLS/verilator/bin:$PATH"
-export PATH="$PATH:$MY_TOOLS/verible/verible-v0.0-3307-gc719ed3f/bin"
-export NETBOX_TOKEN="44f47e34f8be0954a3a9fc539944f09a6a6ddd58"
-export TERM="tmux-256color"
+export VERILATOR_ROOT="$MY_TOOLS/verilator"
+export PATH="$VERILATOR_ROOT/bin:$PATH"
+
+export NVIM_ROOT="$MY_TOOLS/nvim-linux-x86_64"
+export PATH="$NVIM_ROOT/bin:$PATH"
+export PATH="$PATH:$MY_TOOLS/verible/latest/bin"
 
 # fuzzy finder setup
-eval "$(fzf --bash)"
+if command -v fzf >/dev/null 2>&1; then
+    eval "$(fzf --bash)"
 
-# fzf-cd (Alt-C) Print tree structure in the preview window
-export FZF_ALT_C_OPTS="
-  --walker-skip .git,node_modules,venv,.venv
-  --preview 'tre --directories --color always {}'"
+    # fzf-cd (Alt-C) Print tree structure in the preview window
+    export FZF_ALT_C_OPTS="
+    --walker-skip .git,node_modules,venv,.venv
+    --preview 'tre --directories --color always {}'"
 
-# fzf-paste (Ctrl-T) selected items to terminal.
-# Preview file content using bat (https://github.com/sharkdp/bat)
-export FZF_CTRL_T_OPTS="
-  --walker-skip .git,node_modules,target
-  --preview 'bat -n --color=always {}'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+    # fzf-paste (Ctrl-T) selected items to terminal.
+    # Preview file content using bat (https://github.com/sharkdp/bat)
+    export FZF_CTRL_T_OPTS="
+    --walker-skip .git,node_modules,target
+    --preview 'bat -n --color=always {}'
+    --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+fi
 
 if [[ -d "${HOME}/.cargo" ]]; then
     . "${HOME}/.cargo/env"
@@ -43,30 +44,6 @@ fi
 # Source tcsh from bash, become bash
 source_tcsh() {
     tcsh -c "source ${1}; exec bash"
-}
-
-# Send files to remote host
-scp_to() {
-    if [ "$#" -ne 3 ]; then
-        echo "Usage: scp_to <remote> <src> <dest>"
-        return 1
-    fi
-    local remote=$1
-    local src=$2
-    local dest=$3
-    scp -r -- "$src" "${USER}@${remote}:$dest"
-}
-
-# Retrieve files from remote host
-scp_from() {
-    if [ "$#" -ne 3 ]; then
-        echo "Usage: scp_from <remote> <src> <dest>"
-        return 1
-    fi
-    local remote=$1
-    local src=$2
-    local dest=$3
-    scp -r -- "${USER}@${remote}:$src" "$dest"
 }
 
 VERIBLE_SRCDIRS=(
@@ -87,7 +64,7 @@ gen_verible_filelist() {
     find "${dirs[@]}" \
         \( -name verif -o -name hard_ip \) -prune -o \
         \( -type f \( -name "*.sv" -o -name "*.svh" -o -name "*.vh" -o -name "*.v" \) \) -print0 |
-        sort -z | tr '\0' '\n' > verible.filelist
+        sort -z | tr '\0' '\n' >verible.filelist
 }
 
 function add_to_cpath() {
@@ -110,3 +87,7 @@ function add_to_cpath() {
         echo "No .c or .h files found in '$search_dir'."
     fi
 }
+
+if [[ -f $_script_dir/.bash.tmux-bash-completion ]]; then
+    . $_script_dir/.bash.tmux-bash-completion
+fi
