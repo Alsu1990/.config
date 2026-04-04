@@ -13,8 +13,7 @@
 return {
   on_attach = function(client, buf_id)
     -- Reduce very long list of triggers for better 'mini.completion' experience
-    client.server_capabilities.completionProvider.triggerCharacters =
-      { '.', ':', '#', '(' }
+    client.server_capabilities.completionProvider.triggerCharacters = { '.', ':', '#', '(' }
 
     -- Use this function to define buffer-local mappings and behavior that depend
     -- on attached client or only makes sense if there is language server attached.
@@ -25,10 +24,14 @@ return {
       -- Define runtime properties. Use 'LuaJIT', as it is built into Neovim.
       runtime = { version = 'LuaJIT', path = vim.split(package.path, ';') },
       workspace = {
+        checkThirdParty = false,
         -- Don't analyze code from submodules
         ignoreSubmodules = true,
         -- Add Neovim's methods for easier code writing
-        library = { vim.env.VIMRUNTIME },
+        library = {
+          vim.env.VIMRUNTIME,
+          vim.fn.stdpath('data') .. '/site/pack/core/opt/mini.nvim/lua',
+        },
       },
     },
   },

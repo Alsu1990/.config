@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "blink.cmp": {
+      "rev": "ba9601b77e721d53d66e1486a30a05c6311cf535",
+      "src": "https://github.com/saghen/blink.cmp"
+    },
     "conform.nvim": {
       "rev": "086a40dc7ed8242c03be9f47fbcee68699cc2395",
       "src": "https://github.com/stevearc/conform.nvim"
@@ -7,6 +11,14 @@
     "friendly-snippets": {
       "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
       "src": "https://github.com/rafamadriz/friendly-snippets"
+    },
+    "fzf-lua": {
+      "rev": "abacb0693d7a37de9e85e6fcb2d22d848cb75cef",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
+    "gitsigns.nvim": {
+      "rev": "944ef13cc8d8fe8b846c91f36041c8dfb85ca000",
+      "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "kanagawa.nvim": {
       "rev": "aef7f5cec0a40dbe7f3304214850c472e2264b10",
@@ -39,6 +51,14 @@
     "nvim-treesitter-textobjects": {
       "rev": "93d60a475f0b08a8eceb99255863977d3a25f310",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
+    },
+    "oil.nvim": {
+      "rev": "0fcc83805ad11cf714a949c98c605ed717e0b83e",
+      "src": "https://github.com/stevearc/oil.nvim"
+    },
+    "toggleterm.nvim": {
+      "rev": "9a88eae817ef395952e08650b3283726786fb5fb",
+      "src": "https://github.com/akinsho/toggleterm.nvim"
     }
   }
 }

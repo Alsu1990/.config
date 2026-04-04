@@ -23,7 +23,7 @@
 vim.g.mapleader = ' ' -- Use `<Space>` as <Leader> key
 
 vim.o.mouse       = 'a'            -- Enable mouse
-vim.o.mousescroll = 'ver:25,hor:6' -- Customize mouse scroll
+vim.o.mousescroll = 'ver:10,hor:6' -- Customize mouse scroll
 vim.o.switchbuf   = 'usetab'       -- Use already opened buffers when switching
 vim.o.undofile    = true           -- Enable persistent undo
 
@@ -33,6 +33,7 @@ vim.o.shada = "'100,<50,s10,:1000,/100,@100,h" -- Limit ShaDa file (for startup)
 vim.cmd('filetype plugin indent on')
 if vim.fn.exists('syntax_on') ~= 1 then vim.cmd('syntax enable') end
 
+vim.opt.clipboard = "unnamedplus"
 -- UI =========================================================================
 vim.o.breakindent    = true       -- Indent wrapped lines to match line start
 vim.o.breakindentopt = 'list:-1'  -- Add padding for lists (if 'wrap' is set)
