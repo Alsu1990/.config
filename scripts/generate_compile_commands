@@ -1,0 +1,126 @@
+#!/bin/bash
+
+generate_compile_commands() {
+  echo "Generating compile_commands.json..."
+
+  if ! command -v cmake &>/dev/null; then
+    echo "Error: cmake could not be found."
+    return 1
+  fi
+
+  # Define the CMakeLists.txt content
+  local CMAKE_CONTENT='cmake_minimum_required(VERSION 3.10)
+project(clangd_dummy_project)
+
+set(CMAKE_CXX_STANDARD 17)
+
+# Function to add specific subdirectories to include path
+function(add_header_dirs_to_include base_dir)
+    file(GLOB_RECURSE children LIST_DIRECTORIES true RELATIVE ${base_dir} ${base_dir}/*)
+    foreach(child ${children})
+        if(IS_DIRECTORY ${base_dir}/${child})
+            # Avoid traversing into build, git, or bazel directories
+            if(child MATCHES "^([.]|build|bazel-|out|output|node_modules)")
+                continue()
+            endif()
+            get_filename_component(dir_name ${child} NAME)
+            if(dir_name MATCHES "^(inc|headers|hdrs|hdr)$")
+                include_directories(${base_dir}/${child})
+            endif()
+        endif()
+    endforeach()
+endfunction()
+
+# Function to add ALL subdirectories of a directory to include path
+function(add_all_dirs_to_include base_dir)
+    if(NOT EXISTS ${base_dir})
+        return()
+    endif()
+    include_directories(${base_dir})
+    file(GLOB_RECURSE children LIST_DIRECTORIES true RELATIVE ${base_dir} ${base_dir}/*)
+    foreach(child ${children})
+        if(IS_DIRECTORY ${base_dir}/${child})
+            if(child MATCHES "^([.]|build|bazel-|out|output|node_modules)")
+                continue()
+            endif()
+            include_directories(${base_dir}/${child})
+        endif()
+    endforeach()
+endfunction()
+
+# Add header subdirectories of the project root
+add_header_dirs_to_include(${CMAKE_SOURCE_DIR})
+
+# Explicitly check external/emu if it exists (for local overrides)
+if(EXISTS ${CMAKE_SOURCE_DIR}/external/emu)
+    add_header_dirs_to_include(${CMAKE_SOURCE_DIR}/external/emu)
+    include_directories(${CMAKE_SOURCE_DIR}/external/emu)
+endif()
+
+# Add pdapp_headers if they exist locally
+if(EXISTS "$ENV{HOME}/workspace/pdapp_headers")
+    message(STATUS "Adding pdapp_headers to include paths...")
+    add_all_dirs_to_include("$ENV{HOME}/workspace/pdapp_headers")
+endif()
+
+# Add source files
+file(GLOB_RECURSE PROJECT_SOURCES RELATIVE ${CMAKE_SOURCE_DIR}
+    "*.cpp"
+    "*.cc"
+    "*.cxx"
+    "*.c"
+)
+
+# Filter out unwanted directories from sources
+set(FILTERED_SOURCES "")
+foreach(source ${PROJECT_SOURCES})
+    if(NOT source MATCHES "^([.]|build|bazel-|out|output|node_modules)/")
+        list(APPEND FILTERED_SOURCES ${source})
+    endif()
+endforeach()
+
+if(EXISTS ${CMAKE_SOURCE_DIR}/external/emu)
+    file(GLOB_RECURSE EMU_SOURCES RELATIVE ${CMAKE_SOURCE_DIR}
+        "external/emu/*.cpp"
+        "external/emu/*.cc"
+        "external/emu/*.cxx"
+        "external/emu/*.c"
+    )
+endif()
+
+# Ensure we have at least one source file to avoid CMake error
+if(NOT FILTERED_SOURCES AND NOT EMU_SOURCES)
+    file(WRITE ${CMAKE_BINARY_DIR}/dummy_source.cpp "// Dummy file for clangd\n")
+    set(FILTERED_SOURCES ${CMAKE_BINARY_DIR}/dummy_source.cpp)
+endif()
+
+add_library(dummy_clangd_target ${FILTERED_SOURCES} ${EMU_SOURCES})'
+
+  # Write CMakeLists.txt to current directory
+  echo "$CMAKE_CONTENT" >CMakeLists.txt
+
+  # Run cmake and capture log in case of failure
+  if ! cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 . >cmake_log.txt 2>&1; then
+    echo "Error: CMake failed. Log:"
+    cat cmake_log.txt
+    rm -f cmake_log.txt
+  else
+    rm -f cmake_log.txt
+  fi
+
+  if [ -f "compile_commands.json" ]; then
+    echo "compile_commands.json generated successfully."
+  else
+    echo "Error: Failed to generate compile_commands.json"
+  fi
+
+  # Cleanup CMake artifacts
+  rm -f CMakeLists.txt
+  rm -rf CMakeFiles
+  rm -f CMakeCache.txt
+  rm -f cmake_install.cmake
+  rm -f Makefile
+}
+
+# Run the function
+generate_compile_commands
