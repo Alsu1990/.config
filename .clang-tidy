@@ -1,0 +1,69 @@
+Checks: "-*,
+  bugprone-*,
+  performance-*,
+  readability-*,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  -modernize-avoid-c-arrays,
+  google-*,
+  google3-*"
+
+# Examples of specific checks and options that align with Google style:
+CheckOptions:
+  # Enforces consistency with Google's explicit constructor style guide rule
+  - { key: google-explicit-constructor.Check, value: 1 }
+
+  # Flags using namespace directives, aligning with Google's namespace rules
+  - { key: google-build-using-namespace.Check, value: 1 }
+
+  # Customizes the TODO comment format to the 'Parentheses' style (e.g., // TODO(username): details)
+  - { key: google-readability-todo.Style, value: Parentheses }
+
+  # Finds usages of C-style casts, encouraging C++ casts
+  - { key: google-readability-casting.Check, value: 1 }
+
+  # Type Names (Classes, Structs, Enums): Use CamelCase (e.g., MyClass, MyStruct, MyEnum).
+  # See go/cstyle#Type_Names.
+  - { key: readability-identifier-naming.ClassCase, value: CamelCase }
+  - { key: readability-identifier-naming.StructCase, value: CamelCase }
+  - { key: readability-identifier-naming.EnumCase, value: CamelCase }
+  - { key: readability-identifier-naming.TypedefCase, value: CamelCase }
+  - { key: readability-identifier-naming.TypeAliasCase, value: CamelCase }
+
+  # Variable Names: Use lower_case (snake_case).
+  # See go/cstyle#Variable_Names.
+  - { key: readability-identifier-naming.VariableCase, value: lower_case }
+  - { key: readability-identifier-naming.GlobalVariableCase, value: lower_case }
+  - { key: readability-identifier-naming.ParameterCase, value: lower_case }
+
+  # Member Variables: Google Style mandates trailing underscores for class data members,
+  # but NOT for struct data members.
+  # We use Private/Protected/Public member naming configuration to achieve this behavior
+  # as a standard fallback when google3-specific checks are not running.
+  - { key: readability-identifier-naming.PrivateMemberCase, value: lower_case }
+  - { key: readability-identifier-naming.PrivateMemberSuffix, value: "_" }
+  - { key: readability-identifier-naming.ProtectedMemberCase, value: lower_case }
+  - { key: readability-identifier-naming.ProtectedMemberSuffix, value: "_" }
+  - { key: readability-identifier-naming.PublicMemberCase, value: lower_case }
+  - { key: readability-identifier-naming.PublicMemberSuffix, value: "" }
+
+  # Function Names: Use CamelCase (e.g., MyFunction, CalculateValue()).
+  # See go/cstyle#Function_Names.
+  # NOTE: we have to many functions with lowercase in our codebases
+  # so I have to silence this one
+  # - { key: readability-identifier-naming.FunctionCase, value: CamelCase }
+  # - { key: readability-identifier-naming.MethodCase, value: CamelCase }
+
+  # Constant Names: Use kConstantCase (e.g., kMyConstant).
+  # See go/cstyle#Constant_Names.
+  - { key: readability-identifier-naming.ConstantPrefix, value: "k" }
+  - { key: readability-identifier-naming.ConstantCase, value: CamelCase }
+  - { key: readability-identifier-naming.GlobalConstantPrefix, value: "k" }
+  - { key: readability-identifier-naming.GlobalConstantCase, value: CamelCase }
+  - { key: readability-identifier-naming.StaticConstantPrefix, value: "k" }
+  - { key: readability-identifier-naming.StaticConstantCase, value: CamelCase }
+
+  # Enumerator Names: Use kEnumeratorCase (e.g., kEnumValue).
+  # See go/cstyle#Enumerator_Names.
+  - { key: readability-identifier-naming.EnumeratorPrefix, value: "k" }
+  - { key: readability-identifier-naming.EnumeratorCase, value: CamelCase }

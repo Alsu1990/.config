@@ -1,0 +1,33 @@
+# ~/.clangd
+CompileFlags:
+  Add:
+    [
+      "-Wno-address-of-temporary",
+      "-Wall",
+      "-Wno-error",
+      "-fdelayed-template-parsing",
+      "--std=c++17",
+      "-I/usr/local/google/home/alexsukmanov/workspace/pdapp_headers",
+      "-I/usr/include",
+      "-I/usr/include/c++/15",
+      "-I/usr/include/c++/15/x86_64-redhat-linux",
+      "-I/usr/include/c++/15/backward",
+      "-Iexternal/googletest/googletest/include",
+      "-Iexternal/googletest/googlemock/include",
+      "-I.",
+      "-Iexternal",
+      "-Iexternal/emu",
+      "-Iexternal/nhk--common",
+      "-DNO_IDE",
+    ]
+  Remove: ["-fno-canonical-system-headers"]
+
+Index:
+  # Helps with performance on large projects
+  Background: Build
+
+InlayHints:
+  # Shows parameter names and types inline (very helpful for C++)
+  Enabled: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes

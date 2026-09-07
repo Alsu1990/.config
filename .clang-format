@@ -1,0 +1,8 @@
+# Global clang-format configuration (go/cstyle)
+# Located at ~/.clang-format
+
+BasedOnStyle: Google
+
+# Keep pointer alignment consistent (e.g., `int* p` instead of `int *p`)
+DerivePointerAlignment: false
+PointerAlignment: Left

@@ -1,0 +1,63 @@
+# Global Ruff configuration file (go/pystyle / Google Python Style Guide)
+# Located at ~/.config/ruff/ruff.toml
+
+# Google Style Guide recommends a maximum line length of 80 characters.
+line-length = 80
+
+# Google3 Python typically uses 2-space indentation to match C++ style.
+# If you work on open-source/external Python projects (which use PEP-8),
+# you may want to change this to 4.
+indent-width = 2
+builtins = ["_sibling_"]
+
+[lint]
+# Select rules to align with Google Python Style Guide
+select = [
+    "F",      # Pyflakes (errors, unused imports, etc.)
+    "E", "W", # pycodestyle (style violations)
+    "I",      # isort (import sorting)
+    "UP",     # pyupgrade (modernize Python syntax)
+    "D",      # pydocstyle (docstring conventions)
+    "C4",     # flake8-comprehensions (comprehension optimizations)
+    "SIM",    # flake8-simplify (code simplification helpers)
+    "B",      # flake8-bugbear (common design bugs)
+    "RUF",    # Ruff-specific rules
+]
+
+ignore = [
+    # Google Docstring Style overrides
+    "D203",  # 1 blank line required before class docstring (conflicts with D211)
+    "D213",  # Multi-line summary should start at the second line (conflicts with D212)
+
+    # Google Style encourages docstrings, but linters typically do not enforce
+    # them for every single public function or magic method.
+    "D100",  # Missing docstring in public module
+    "D101",  # Missing docstring in public class
+    "D102",  # Missing docstring in public method
+    "D103",  # Missing docstring in public function
+    "D104",  # Missing docstring in public package
+    "D105",  # Missing docstring in magic method
+    # 2-space indentation (Google Python Style Guide / go/pystyle)
+    "E111",  # Indentation is not a multiple of 4
+    "E114",  # Indentation is not a multiple of 4 (comment)
+    "E117",  # Over-indented
+
+    # Overlap with pycodestyle line-length or managed by formatter
+    "E501",  # Line too long (handled by formatter)
+]
+
+[lint.pydocstyle]
+# Enforce Google-style docstring format (e.g. Args, Returns, Raises)
+convention = "google"
+
+[lint.isort]
+# Google Style prefers single-line imports
+force-single-line = true
+order-by-type = false
+
+[format]
+# Formatter options
+quote-style = "preserve"  # "preserve" keeps existing single/double quotes, or set to "single"/"double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "lf"
