@@ -1,43 +1,28 @@
--- ┌──────────────────────────┐
--- │ Built-in Neovim behavior │
--- └──────────────────────────┘
---
--- This file defines Neovim's built-in behavior. The goal is to improve overall
--- usability in a way that works best with MINI.
---
--- Here `vim.o.xxx = value` sets default value of option `xxx` to `value`.
--- See `:h 'xxx'` (replace `xxx` with actual option name).
---
--- Option values can be customized on a per buffer or window basis.
--- See 'after/ftplugin/' for common example.
---
--- Notes:
--- - Some options (like `:h 'exrc'`) need to be set before this file is sourced.
---   Set them directly at the bottom of the 'init.lua' file.
-
 -- stylua: ignore start
--- The next part (until `-- stylua: ignore end`) is aligned manually for easier
--- reading. Consider preserving this or remove `-- stylua` lines to autoformat.
 
 -- General ====================================================================
-vim.g.mapleader = ' ' -- Use `<Space>` as <Leader> key
+vim.g.mapleader = ' '
+vim.g.auto_root = {
+  "WORKSPACE",
+  "WORKSPACE.bzl",
+  "WORKSPACE.bazel",
+  ".git",
+  "lua",
+}
 
 vim.o.mouse       = 'a'            -- Enable mouse
-vim.o.mousescroll = 'ver:10,hor:6' -- Customize mouse scroll
+vim.o.mousescroll = 'ver:25,hor:6' -- Customize mouse scroll
 vim.o.switchbuf   = 'usetab'       -- Use already opened buffers when switching
 vim.o.undofile    = true           -- Enable persistent undo
 
 vim.o.shada = "'100,<50,s10,:1000,/100,@100,h" -- Limit ShaDa file (for startup)
 
--- Enable all filetype plugins and syntax (if not enabled, for better startup)
-vim.cmd('filetype plugin indent on')
-if vim.fn.exists('syntax_on') ~= 1 then vim.cmd('syntax enable') end
-
-vim.opt.clipboard = "unnamedplus"
 -- UI =========================================================================
+vim.o.cmdheight      = 0          -- Hide command bar when idle; statusline sits on bottom row
+vim.o.laststatus     = 3          -- Global statusline across all windows
 vim.o.breakindent    = true       -- Indent wrapped lines to match line start
 vim.o.breakindentopt = 'list:-1'  -- Add padding for lists (if 'wrap' is set)
-vim.o.colorcolumn    = '+1'       -- Draw column on the right of maximum width
+-- vim.o.colorcolumn    = '+1'       -- Draw column on the right of maximum width
 vim.o.cursorline     = true       -- Enable current line highlighting
 vim.o.linebreak      = true       -- Wrap lines at 'breakat' (if 'wrap' is set)
 vim.o.list           = true       -- Show helpful text indicators
@@ -52,8 +37,7 @@ vim.o.signcolumn     = 'yes'      -- Always show signcolumn (less flicker)
 vim.o.splitbelow     = true       -- Horizontal splits will be below
 vim.o.splitkeep      = 'screen'   -- Reduce scroll during window split
 vim.o.splitright     = true       -- Vertical splits will be to the right
--- vim.o.winborder      = 'single'   -- Use border in floating windows
-vim.o.winborder      = 'rounded'  -- ...changed...
+vim.o.winborder      = 'single'   -- Use border in floating windows
 vim.o.wrap           = false      -- Don't visually wrap lines (toggle with \w)
 
 vim.o.cursorlineopt  = 'screenline,number' -- Show cursor line per screen line
@@ -72,7 +56,6 @@ vim.o.foldtext    = ''       -- Show text under fold with its highlighting
 vim.o.autoindent    = true    -- Use auto indent
 vim.o.expandtab     = true    -- Convert tabs to spaces
 vim.o.formatoptions = 'rqnl1j'-- Improve comment editing
-vim.o.hlsearch      = false   -- ...added...: Cursorword is mostly sufficient
 vim.o.ignorecase    = true    -- Ignore case during search
 vim.o.incsearch     = true    -- Show search matches while typing
 vim.o.infercase     = true    -- Infer case in built-in completion
@@ -85,9 +68,7 @@ vim.o.virtualedit   = 'block' -- Allow going past end of line in blockwise mode
 
 vim.o.iskeyword = '@,48-57,_,192-255,-' -- Treat dash as `word` textobject part
 
--- Pattern for a start of numbered list (used in `gw`). This reads as
--- "Start of list item is: at least one special character (digit, -, +, *)
--- possibly followed by punctuation (. or `)`) followed by at least one space".
+-- Numbered list pattern for gw
 vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 
 -- Built-in completion
@@ -95,23 +76,19 @@ vim.o.complete        = '.,w,b,kspell'                  -- Use less sources
 vim.o.completeopt     = 'menuone,noselect,fuzzy,nosort' -- Use custom behavior
 vim.o.completetimeout = 100                             -- Limit sources delay
 
--- Autocommands ===============================================================
-
--- Don't auto-wrap comments and don't insert comment leader after hitting 'o'.
--- Do on `FileType` to always override these changes from filetype plugins.
-local f = function() vim.cmd('setlocal formatoptions-=c formatoptions-=o') end
-Config.new_autocmd('FileType', nil, f, "Proper 'formatoptions'")
-
--- There are other autocommands created by 'mini.basics'. See 'plugin/30_mini.lua'.
-
 -- Diagnostics ================================================================
-
--- Neovim has built-in support for showing diagnostic messages. This configures
--- a more conservative display while still being useful.
--- See `:h vim.diagnostic` and `:h vim.diagnostic.config()`.
 local diagnostic_opts = {
   -- Show signs on top of any other sign, but only for warnings and errors
-  signs = { priority = 9999, severity = { min = 'WARN', max = 'ERROR' } },
+  signs = {
+    priority = 9999,
+    severity = { min = 'WARN', max = 'ERROR' },
+    text = {
+      [vim.diagnostic.severity.ERROR]  = " ",
+      [vim.diagnostic.severity.WARN]  = " ",
+      [vim.diagnostic.severity.HINT]  = " ",
+      [vim.diagnostic.severity.INFO]  = " ",
+    },
+  },
 
   -- Show all diagnostics as underline (for their messages type `<Leader>ld`)
   underline = { severity = { min = 'HINT', max = 'ERROR' } },
@@ -119,6 +96,7 @@ local diagnostic_opts = {
   -- Show more details immediately for errors on the current line
   virtual_lines = false,
   virtual_text = {
+    prefix = '●',
     current_line = true,
     severity = { min = 'ERROR', max = 'ERROR' },
   },
